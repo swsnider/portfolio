@@ -44,12 +44,6 @@ class AssessmentController(controllers.Controller, identity.SecureResource):
 	def index1(self, id=None, category=None, osep='None', print_area='false'):
 		if identity.current.user.basketmode:
 			raise redirect(url("index2",id=id,category=category,osep=osep,print_area=print_area))
-		
-#		if osep is not None:
-#			if osep == 'True':
-#				osep = True
-#			else:
-#				osep = False
 		osep = True
 	
 		if print_area == 'true':

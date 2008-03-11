@@ -16,6 +16,3 @@ ecaeps/model.py
 ecaeps/release.py
 ecaeps/config/__init__.py
 ecaeps/templates/__init__.py
-ecaeps/tests/__init__.py
-ecaeps/tests/test_controllers.py
-ecaeps/tests/test_model.py

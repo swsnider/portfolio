@@ -2,6 +2,14 @@ import lucene
 import turbogears
 import sys
 
+# To use this library:
+#
+# Add rowDeleted, rowAdded, and rowUpdated as deleted, added, and updated listeners to the correct SQLObject model
+# 
+# Initialize the index by calling initIndex with the SQLObject table class that you want to index
+# 
+# To search the index, call doSearch with a lucene query string. The optional field parameter is the field in each lucene document that contains the database id for the document.
+
 try:
 	lucene.initVM(lucene.CLASSPATH)
 except:
@@ -68,12 +76,10 @@ def initIndex(tbl):
 		acc += 1
 		if acc % 100 == 0:
 			print acc
-		#Begin Lucene copy section
 		doc = lucene.Document()
 		doc.add(lucene.Field("id", unicode(c.id), STORE, UN_TOKENIZED))
 		for i in lfc['fields']:
 			doc.add(lucene.Field(i['name'], unicode(eval(LuceneFileCache.getValue(i))), COMPRESS, TOKENIZED))
-		#End Lucene copy section
 		writer.addDocument(doc)
 	writer.optimize(True)
 	writer.close()
@@ -89,7 +95,6 @@ def reindex(c):
 		COMPRESS = lucene.Field.Store.COMPRESS
 		TOKENIZED = lucene.Field.Index.TOKENIZED
 		UN_TOKENIZED = lucene.Field.Index.UN_TOKENIZED
-		#Begin Lucene copy section
 		doc = lucene.Document()
 		doc.add(lucene.Field("id", unicode(c.id), STORE, UN_TOKENIZED))
 		lfc = LuceneFileCache().get_field_struct()
@@ -97,7 +102,6 @@ def reindex(c):
 			modules = map(__import__, lfc['modules'])
 		for i in lfc['fields']:
 			doc.add(lucene.Field(i['name'], unicode(eval(LuceneFileCache.getValue(i))), COMPRESS, TOKENIZED))
-		#End Lucene copy section
 		writer.deleteDocuments(lucene.Term("id", unicode(c.id)))
 		writer.addDocument(doc)
 		writer.optimize(True)

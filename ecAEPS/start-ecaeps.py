@@ -21,6 +21,7 @@ else:
     update_config(configfile="prod.cfg",modulename="ecaeps.config")
 config.update(dict(package="ecaeps"))
 
+#Add listeners to SQLObject so that the Lucene index is automatically updated
 import sqlobject.events as e
 from ecaeps.model import Child
 import ecaeps.luceneUtil as luceneUtil

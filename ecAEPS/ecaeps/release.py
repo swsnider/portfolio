@@ -2,11 +2,11 @@
 
 version = "1.0"
 
-# description = "Your plan to rule the world"
-# long_description = "More description about your plan"
-# author = "Your Name Here"
-# email = "YourEmail@YourDomain"
-# copyright = "Vintage 2006 - a good year indeed"
+description = "Replacement for AEPSi"
+long_description = "This TurboGears project created to replace AEPSi due to the extreme nastiness of said project's user interface, as well as its cost."
+author = "Silas Snider and James Sirard"
+email = "swsnider@gmail.com"
+copyright = "Copyright 2008 EC CARES"
 
 # if it's open source, you might want to specify these
 # url = "http://yourcool.site/"
