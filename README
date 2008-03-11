@@ -8,3 +8,5 @@ googleauth: A drupal plugin that exposes a SAML server specifically for
 use with Google Apps for Education -- this was a Google Summer of Code 
 (2007) project
 
+bugs: A bugtracking system I developed for my own use. It's written in TurboGears, and is, I claim,
+easier to set up than Trac.
