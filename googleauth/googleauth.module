@@ -1,0 +1,283 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Implement a single sign on provider for Google Apps for Education
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function googleauth_help($section) {
+  switch ($section) {
+    case 'admin/help#googleauth':
+      $output = '<p>'.t('The googleauth module implements a provider for the Google Apps Single Sign On API. All users with the <em>use googleauth</em> permission will be able to authenticate with your Google Apps install').'</p>';
+      return $output;
+      break;
+   }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function googleauth_menu($may_cache) {
+  $items = array();
+  if ($may_cache) {
+    $items[] = array(
+      'title' => t('Provider'),
+      'path' => 'googleauth/signin',
+      'callback' => 'googleauth_sign_in',
+      'access' => user_access('use googleauth'),
+      'type' => MENU_CALLBACK
+    );
+	$items[] = array(
+      'title' => t('Google Sign Out'),
+      'path' => 'googleauth/signout',
+      'callback' => 'googleauth_sign_out',
+      'access' => user_access('use googleauth'),
+      'type' => MENU_CALLBACK
+    );
+    $items[] = array(
+    'path' => 'admin/settings/googleauth',
+    'title' => t('googleauth module settings'),
+    'description' => t('googleauth configuration settings for file paths'),
+    'callback' => 'drupal_get_form',
+    'callback arguments' => 'googleauth_adminpage',
+    'access' => user_access('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+   );
+  }
+  return $items;
+}
+
+/**
+ * Reads in an XML string that has been gzipped and then base64 encoded, and returns the plaintext.
+ */
+
+function decode_and_unzip($req){
+  $req = base64_decode($req);
+  $req1 = gzinflate($req);
+  //Note: One of my servers doesn't have this function for some reason, so use an alternative
+  if ($req1 === FALSE) {
+    $req1 = gzuncompress($req);
+  }
+  return $req1;
+}
+
+
+/**
+ * Gets only the parts of the SAMLRequest that we actually want.
+ */
+function get_the_interesting_parts($req){
+  $parser = xml_parser_create();
+  $result1 = xml_parse_into_struct($parser, $req, $result, $index);
+  if ($result1 == 0){
+    return FALSE;
+  }
+  $interesting['acs_url'] = $result[0]['attributes']['ASSERTIONCONSUMERSERVICEURL'];
+  $interesting['issue_instant'] = $result[0]['attributes']['ISSUEINSTANT'];
+  $interesting['provider_name'] = $result[0]['attributes']['PROVIDERNAME'];
+  $interesting['request_ID'] = $result[0]['attributes']['ID'];
+  return $interesting;
+}
+
+/**
+ * Get the wierd time format that SAML requires
+ */
+
+function get_wierd_time($time_off){
+  return gmdate('Y-m-d\TH:i:s\Z', time() + $time_off);
+}
+
+/**
+ * Generate a SAML ID
+ */
+
+function get_random_id(){
+  $random_pool = 'abcdefghijklmnopqrstuvwxyz';
+  $the_id = '';
+  
+  for ($i = 0; $i < 40; $i++ ) {
+    $the_id .= $random_pool[rand(0,strlen($random_pool)-1)];
+  }
+  
+  return $the_id;
+
+}
+
+/**
+ * Generate the response xml document, and sign it with the key
+ */
+
+function get_the_actual_response($i, $public, $private){
+  $curr = <<<EOF
+<samlp:Response ID="{{RESPONSE_ID}}" IssueInstant="{{ISSUE_INSTANT}}" Version="2.0" Destination="{{DESTINATION}}" InResponseTo="{{REQUEST_ID}}" xmlns="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#{{RSADSA}}-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue></DigestValue></Reference></SignedInfo><SignatureValue></SignatureValue><KeyInfo><KeyValue></KeyValue></KeyInfo></Signature><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><Assertion ID="{{ASSERTION_ID}}" IssueInstant="{{ISSUE_INSTANT}}" Version="2.0"	xmlns="urn:oasis:names:tc:SAML:2.0:assertion"><Issuer>{{ISSUER_DOMAIN}}</Issuer><Subject><NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:emailAddress">{{USERNAME_STRING}}</NameID><SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"/></Subject><Conditions NotBefore="{{NOT_BEFORE}}" NotOnOrAfter="{{NOT_ON_OR_AFTER}}"></Conditions><AuthnStatement AuthnInstant="{{AUTHN_INSTANT}}"><AuthnContext><AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</AuthnContextClassRef></AuthnContext></AuthnStatement></Assertion></samlp:Response>
+EOF;
+  $curr = str_replace('{{USERNAME_STRING}}', $i['user_name'], $curr); 
+  $curr = str_replace('{{RESPONSE_ID}}', get_random_id(), $curr);
+  $curr = str_replace('{{ISSUE_INSTANT}}', get_wierd_time(0), $curr);
+  $curr = str_replace('{{AUTHN_INSTANT}}', get_wierd_time(0), $curr);
+  $curr = str_replace('{{NOT_BEFORE}}', $i['not_before'], $curr);
+  $curr = str_replace('{{NOT_ON_OR_AFTER}}', $i['not_on_or_after'], $curr);
+  $curr = str_replace('{{ASSERTION_ID}}', get_random_id(), $curr);
+  $curr = str_replace('{{RSADSA}}', strtolower($i['key_type']), $curr);
+  $curr = str_replace('{{REQUEST_ID}}', $i['request_ID'], $curr);
+  $curr = str_replace('{{DESTINATION}}', $i['acs_url'], $curr);
+  $curr = str_replace('{{ISSUER_DOMAIN}}', $i['domain_name'], $curr);
+  $temp = tempnam('/var/tmp', 'TO_SIGN_');
+  if (!$h = fopen($temp, 'w')) {
+    drupal_set_message('Cannot open temporary file!');
+    return FALSE;
+  }
+  if (fwrite($h, $curr) === FALSE) {
+    drupal_set_message('Cannot write to temporary file');
+    return FALSE;
+  }
+  fclose($h);
+  $temp_out = tempnam('/var/tmp', 'SIGNED_');
+  exec('chmod a+r ' . $temp);
+  exec('chmod a+r ' . $temp_out,$trash);
+  $result = exec(variable_get('googleauth_path_to_xmlsec','/usr/bin/xmlsec1') . ' sign --privkey-pem ' . $private . ' --pubkey-der ' . $public . ' --output ' . $temp_out . ' ' . $temp, $result);
+  unlink($temp);
+  $actual_response = file_get_contents($temp_out);
+  if (!$actual_response){
+    drupal_set_message('Signing failed!');
+    return FALSE;
+  }
+  unlink($temp_out);
+  return $actual_response;
+}
+
+/**
+ * Retrieves the username from drupal
+ */
+
+function get_drupal_username(){
+  global $user;
+  return $user->name;
+}
+
+/**
+ * Menu callback which responds to the Google Auth attempt.
+ */
+function googleauth_sign_in() {
+  $user_name = get_drupal_username();
+  $SAMLRequest = $_GET['SAMLRequest']; // This is base64 encoded and gzipped.
+  if (!$SAMLRequest){
+    //NOTE: This happens if you haven't logged in before attempting to
+    // authenticate to google. For some reason, the login page doesn't
+    // preserve GET variables, and according to the comments I've read,
+    // there doesn't seem to be a way around it without modifying Drupal
+    // Core itself (messy!).
+    drupal_set_message(t("SAMLRequest not present! Please try again!"), 'error');
+    drupal_goto();
+  }
+  $SAMLRequest = decode_and_unzip($SAMLRequest);
+  if ($SAMLRequest === FALSE){
+    drupal_set_message(t("SAMLRequest could not be decoded."), 'error');
+    drupal_goto();
+    return;
+  }
+  $RelayState = $_GET['RelayState']; // This is the url to send them back towards.
+  if ($RelayState === ""){
+    drupal_set_message(t("No page to send you to!"), 'error');
+    drupal_goto();
+    return;
+  }
+  $interesting = get_the_interesting_parts($SAMLRequest);
+  if ($interesting === FALSE){
+    drupal_set_message(t("SAMLRequest could not be decoded: the interesting parts could not be extracted."), 'error');
+    drupal_goto();
+    return;
+  }
+  $public = variable_get('googleauth_public_key_path', FALSE);
+  if ($public === FALSE){
+    drupal_set_message(t("Unable to find a public key!"), 'error');
+    drupal_goto();
+    return;
+  }
+  $private = variable_get('googleauth_private_key_path', FALSE);
+  if ($private === FALSE){
+    drupal_set_message(t("Unable to find a private key!"), 'error');
+    drupal_goto();
+    return;
+  }
+  $interesting['user_name'] = $user_name;
+  $interesting['key_type'] = variable_get('googleauth_key_type', 'dsa');
+  $interesting['not_before'] = get_wierd_time(-300000);
+  $interesting['not_on_or_after'] = get_wierd_time(600000);
+  $output = get_the_actual_response($interesting, $public, $private);
+  if ($output === FALSE){
+    drupal_goto();
+    return;
+  }
+  $true_output =<<<EOF
+  <form name="acsForm" action="{{ACS_URL}}" method="post">
+    <div style="display: none">
+    <textarea style="display:none;" rows=10 cols=80 name="SAMLResponse">{{SAMLResponse}}</textarea>
+    <textarea style="display:none;" rows=10 cols=80 name="RelayState">{{RelayState}}</textarea>
+    </div>
+    <input type="submit" value="Click here to authenticate"/>
+    </form>
+EOF;
+  $true_output = str_replace('{{ACS_URL}}', $interesting['acs_url'], $true_output); 
+  $true_output = str_replace('{{SAMLResponse}}', $output, $true_output); 
+  $true_output = str_replace('{{RelayState}}', $RelayState, $true_output); 
+  return $true_output;
+}
+
+/**
+ * Menu callback which responds to sign out requests.
+ */
+
+function googleauth_sign_out() {
+  //Function does nothing right now (although it could i.e. log the signout)
+  drupal_set_message(t("Signed out of Google Apps"));
+  drupal_goto();
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+
+function googleauth_perm() {
+	return array('use googleauth');
+}
+
+/**
+ * Provides a form to get settings from the users
+ */
+
+function googleauth_adminpage(){
+  $form['googleauth_key_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Public/Private Key type'),
+    '#default_value' => variable_get('googleauth_key_type', 'dsa'),
+    '#options' => array('dsa' => t('dsa'), 'rsa' => t('rsa')),
+    '#description' => t("The key generation algorithm."),
+    '#required' => TRUE
+  );
+  $form['googleauth_private_key_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to private key'),
+    '#default_value' => variable_get('googleauth_private_key_path', ''),
+    '#description' => t("The full, absolute path to the private key."),
+    '#required' => TRUE
+  );
+  $form['googleauth_public_key_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to public key'),
+    '#default_value' => variable_get('googleauth_public_key_path', ''),
+    '#description' => t("The full, absolute path to the public key."),
+    '#required' => TRUE
+  );
+  $form['googleauth_path_to_xmlsec'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to xmlsec'),
+    '#default_value' => variable_get('googleauth_path_to_xmlsec', '/usr/bin/xmlsec1'),
+    '#description' => t("The full, absolute path to xmlsec."),
+    '#required' => TRUE
+  );
+  return system_settings_form($form);
+}

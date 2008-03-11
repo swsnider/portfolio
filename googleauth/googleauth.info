@@ -1,0 +1,4 @@
+; $Id$
+name = Google Auth
+description = "Allows Drupal to act as a provider of Single-Sign-on to Google Apps"
+package = Google Apps
