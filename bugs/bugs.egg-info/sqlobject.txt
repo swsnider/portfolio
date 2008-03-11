@@ -1,0 +1,2 @@
+db_module=bugs.model
+history_dir=$base/bugs/sqlobject-history
