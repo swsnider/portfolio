@@ -1,0 +1,2 @@
+db_module=ecaeps.model
+history_dir=$base/ecaeps/sqlobject-history

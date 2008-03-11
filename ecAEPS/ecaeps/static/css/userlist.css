@@ -1,0 +1,32 @@
+table {
+    min-width: 780px;
+    width: 100%;
+    empty-cells: show;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th {
+    padding: 0 10px 5px 10px;
+    text-align: left;
+    border-right: thin solid gray;
+}
+
+table td {
+    padding: 0px 5px;
+    border-right: thin solid gray;
+}
+
+.last_cell {
+    border-right: none;
+}
+
+input[type=button] {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div#progdiv {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

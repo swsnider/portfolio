@@ -1,0 +1,29 @@
+
+.noprint{
+	display: none;
+}
+
+div#overtable{
+	display: none;
+}
+
+input {
+	border: none;
+	font-size: 1em;
+}
+
+a {
+	color: black !important;
+}
+
+h2 {
+	border: none !important;
+}
+
+tr.criteria {
+	border-bottom: thin solid #ddd;
+}
+
+tr.criteria td {
+	font-size: 1.4em;
+}

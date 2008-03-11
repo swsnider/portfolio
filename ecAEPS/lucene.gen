@@ -1,0 +1,17 @@
+{
+	'modules':[],
+	'fields':[
+		{
+			'name':'name',
+			'value':'unicode(c.lname + ", " + c.fname + " " + c.mname)'
+		},
+		{
+			'name':'ssid',
+			'value':'unicode(c.ssid)'
+		},
+		{
+			'name':'bdate',
+			'value':'unicode(c.bdate)'
+		}
+	]
+}

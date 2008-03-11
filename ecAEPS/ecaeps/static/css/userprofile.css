@@ -1,0 +1,35 @@
+
+/*h1,h2, label, input, select, span {
+	margin: 5px 5px 5px 0px;
+}
+
+label.disabledProgram {
+	border: black thin solid;
+	background-color:white
+}*/
+
+div#success {
+	display: inline;
+	color: red;
+}
+
+td#failure {
+	color: red;
+}
+
+div#man_users {
+	display: inline;
+}
+
+div#global_tools {
+	display: inline;
+}
+
+td.label {
+	width: 100px;
+}
+
+input[type=button] {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

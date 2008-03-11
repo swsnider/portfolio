@@ -1,0 +1,153 @@
+table {
+    clear: both;
+    border-collapse: collapse;
+    /*width: 100%;*/
+    /* border-bottom: thin solid gray; */
+}
+
+table td {
+    border-right: thin solid gray;
+}
+
+table td.level1{
+    padding-left: 0px;
+    font-weight: bold;
+}
+
+table td.level2{
+    padding-left: 20px;
+}
+
+table td.level3{
+    padding-left: 40px;
+}
+
+table td.align_right {
+    text-align: right;
+}
+
+table td.score {/*{{{centered-cells*/
+    text-align: center;
+	vertical-align: middle;
+}
+
+table td.empty {
+	width: 110px;
+    border-right: none;
+}
+
+input.error_score, span.error_score {
+	color: red;
+}
+
+table td.header {
+    border-top: thin solid gray;
+    text-align: center;
+}/* }}}centered-cells*/
+
+table td.sum {
+    text-align: center;
+    border-bottom: thin solid gray;
+}
+
+div#osep_fillval {
+    padding-top: 5px;
+}
+
+.box {
+    display: inline;
+    border: thin solid gray;
+}
+
+span#prefix {
+    float: left;
+    text-align: left;
+    width: 3em;
+}
+
+div.score {
+    text-align:right;
+    display:inline;
+}
+
+table#print_link {
+    display: inline;
+    float: right;
+    border-left: thin solid gray;
+}
+
+table#print_link td {
+    padding: 2px 5px;
+}
+
+table#a_content, table#sums {
+}
+
+div#categories {
+    border-top: thin solid gray;
+    border-bottom: thin solid gray;
+    padding: 5px 0px;
+}
+
+form#fillform {
+    display:inline;
+}
+
+form#fillform > label {
+    padding-right: 3px;
+}
+
+div#overtable {
+	margin-bottom: 10px;
+    padding-top: 5px;
+}
+
+div#fillval {
+	padding-top: 4px;
+	border-top: solid thin gray;
+}
+
+a.current {
+    padding: 2px 5px;
+    background-color: #ffe;
+}
+
+table#categories {
+    display: inline;
+}
+
+table td.category {
+    padding: 2px 5px;
+}
+
+table tr.criteria {
+    font-size: 11px;
+}
+
+table td#current {
+    background-color: #ffe;
+}
+
+table td#leftblank {
+	border-right: none
+}
+
+table td#blank {
+    border-top: solid thin gray;
+	border-left: none;
+	border-right: none;
+	border-bottom: solid thin gray;
+}
+
+table td#category {
+    border-right: none;
+	text-align: center;
+}
+
+table td#testdate {
+    border-bottom: none;
+}
+
+table td.area {
+	font-weight: bold;
+}

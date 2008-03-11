@@ -1,0 +1,41 @@
+a.sort_link {
+    color: #000;
+}
+
+table {/*{{{table*/
+    min-width: 780px;
+    width: 100%;
+    empty-cells: show;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th {
+    padding: 0 10px 5px 10px;
+    text-align: left;
+    border-right: thin solid gray;
+}
+
+table td {
+    padding: 0px 5px;
+    border-right: thin solid gray;
+}
+
+input[type=button] {
+	margin-bottom: 5px;
+}
+
+.last_cell {
+    border-right: none;
+}/*}}}table*/
+/*{{{Old search.css
+@import "/static/css/style.css";
+
+h1,h2, input, select, span {
+	margin: 5px 5px 5px 0px;
+}
+
+label {
+	margin-left: 10px;
+}
+}}}*/
