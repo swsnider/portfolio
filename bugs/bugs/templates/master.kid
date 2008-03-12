@@ -27,21 +27,30 @@
 </head>
 
 <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
-    <div py:if="tg.config('identity.on') and not defined('logging_in')" id="pageLogin">
-        <span py:if="tg.identity.anonymous">
-            <a href="${tg.url('/login')}">Login</a>
-        </span>
-        <span py:if="not tg.identity.anonymous">
-            Welcome ${tg.identity.user.display_name or tg.identity.user.user_name}.
-            <a href="${tg.url('/logout')}">Logout</a>
-        </span>
-    </div>
-
-    <div id="header">&#160;</div>
-
-    <div id="main_content">
-        <div py:replace="[item.text]+item[:]">page content</div>
-    </div>
+ 	<div id="doc3" class="yui-t6">
+   	<div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
+   	<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b">
+					<div class="yui-g">
+						<div id="status_block" class="flash"
+			            	py:if="value_of('tg_flash', None)" py:content="tg_flash"></div>
+						<div py:replace="[item.text]+item[:]">page content</div>
+					</div>
+				</div>
+			</div>
+			<div class="yui-b" py:if="tg.config('identity.on') and not defined('logging_in')" id="pageLogin">
+		        <span py:if="tg.identity.anonymous">
+		            <a href="${tg.url('/login')}">Login</a>
+		        </span>
+		        <span py:if="not tg.identity.anonymous">
+		            Welcome ${tg.identity.user.display_name or tg.identity.user.user_name}.
+		            <a href="${tg.url('/logout')}">Logout</a>
+		        </span>
+			</div>
+		</div>
+   	<div id="ft">Footer is here.</div>
+	</div>
 </body>
 
 </html>
