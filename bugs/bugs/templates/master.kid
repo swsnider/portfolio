@@ -28,7 +28,7 @@
 
 <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
  	<div id="doc3" class="yui-t6">
-   	<div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
+   	<div id="hd"><h1>[Logo]: ${page_title()}</h1></div>
    	<div id="bd">
 			<div id="yui-main">
 				<div class="yui-b">
@@ -54,7 +54,7 @@
 		        </span>
 			</div>
 		</div>
-   	<div id="ft">Footer is here.</div>
+   	<div id="ft">Powered by <a href="http://swsnider.com/projects/bugs">Bugs</a>.</div>
 	</div>
 </body>
 
