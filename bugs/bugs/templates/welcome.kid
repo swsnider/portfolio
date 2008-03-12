@@ -6,10 +6,19 @@
 <title>Welcome to TurboGears</title>
 </head>
 <body>
-	<div class='warning' style="display:none;" id="domexample"><p>Are you sure to delete this item?</p> <input type='button' value='Yes, delete!' onclick='Modalbox.hide()' /> or <input type='button' value='No, leave it!' onclick='Modalbox.hide()' /></div>
-	<script type="text/javascript">
-		Modalbox.show($('domexample'),
-		{title: this.title, width: 300});
-	</script>
+<div id="doc3" class="yui-t6">
+   <div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+	<!-- YOUR DATA GOES HERE -->
+	</div>
+</div>
+	</div>
+	<div class="yui-b"><!-- YOUR NAVIGATION GOES HERE --></div>
+	
+	</div>
+   <div id="ft">Footer is here.</div>
+</div>
 </body>
 </html>
