@@ -130,13 +130,13 @@ class Bug(SQLObject):
     description = UnicodeCol(notNone=True, default="")
     reporter = ForeignKey("User")
     owner = ForeignKey("User")
-    tags = RelatedJoin("Tag", intermediateTable="bug_tag", join_column="bug_id", other_column="tag_id")
+    tags = RelatedJoin("Tag", intermediateTable="bug_tag", joinColumn="bug_id", otherColumn="tag_id")
     properties = MultipleJoin("PropertyData")
     def relname(self):
         return self.reporter.display_name + " -- " + abstract
 
 class Tag(SQLObject):
-    bugs = RelatedJoin("Tag", intermediateTable="bug_tag", join_column="tag_id", other_column="bug_id")
+    bugs = RelatedJoin("Tag", intermediateTable="bug_tag", joinColumn="tag_id", otherColumn="bug_id")
     name = UnicodeCol(length=255,notNone=True)
     def relname(self):
         return self.name
