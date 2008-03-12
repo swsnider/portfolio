@@ -24,6 +24,10 @@ class Root(controllers.RootController):
         # log.debug("Happy TurboGears Controller Responding For Duty")
         flash("Your application is now running")
         return dict(now=time.ctime())
+    @expose()
+    @identity.require(identity.not_anonymous())
+    def ajaxLogin(self):
+        return "success!"
 
     @expose(template="bugs.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):

@@ -1,0 +1,12 @@
+.flash {
+    background-color: #D5F2BF;
+    text-align: center;
+    font-size: large;
+}
+.flash .directions {
+    font-size: small;
+}
+#loginError {
+    color: red;
+    font-size: large;
+}
