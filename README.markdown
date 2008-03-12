@@ -22,3 +22,10 @@ bugs
 
 A bugtracking system I developed for my own use. It's written in TurboGears, and is, I claim,
 easier to set up than Trac.
+
+OpenID
+------
+
+I claim that this project is the first opensource OpenID server that actually works. I was thrashing around trying to find a working OpenID server at 2 in the morning the day 
+of the first coding sprint that the University of Oregon's ACM student club was running, and could find nothing that worked out of the box, so I wrote this. It requires the 
+python JanRain OpenID libraries, SQLObject, and Kid.
