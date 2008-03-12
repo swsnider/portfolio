@@ -5,10 +5,10 @@
 
 <head py:match="item.tag=='{http://www.w3.org/1999/xhtml}head'" py:attrs="item.items()">
 	 
-    <script src="${tg.url('/static/javascript/prototype.js')" type="text/javascript" />
-	 <script src="${tg.url('/static/javascript/scriptaculous.js')" type="text/javascript" />
-	 <script src="${tg.url('/static/javascript/modalbox.js')" type="text/javascript" />
-	 <link rel="stylesheet" href="${tg.url('/static/css/modalbox.css')" type="text/css" media="screen" />
+    <script src="${tg.url('/static/javascript/prototype.js')}" type="text/javascript" />
+	 <script src="${tg.url('/static/javascript/scriptaculous.js')}" type="text/javascript" />
+	 <script src="${tg.url('/static/javascript/modalbox.js')}" type="text/javascript" />
+	 <link rel="stylesheet" href="${tg.url('/static/css/modalbox.css')}" type="text/css" media="screen" />
 	 <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
     <title py:replace="''">Your title goes here</title>
     <meta py:replace="item[:]" name="description" content="master template"/>
