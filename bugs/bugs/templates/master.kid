@@ -40,8 +40,6 @@
     <div id="header">&#160;</div>
 
     <div id="main_content">
-        <div id="status_block" class="flash"
-            py:if="value_of('tg_flash', None)" py:content="tg_flash"></div>
         <div py:replace="[item.text]+item[:]">page content</div>
     </div>
 </body>

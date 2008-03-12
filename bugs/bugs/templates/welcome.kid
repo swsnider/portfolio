@@ -6,17 +6,18 @@
 <title>Welcome to TurboGears</title>
 </head>
 <body>
-<div id="doc3" class="yui-t6">
-   <div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-	<!-- YOUR DATA GOES HERE -->
-	</div>
-</div>
-	</div>
-	<div class="yui-b"><!-- YOUR NAVIGATION GOES HERE --></div>
-	
+	<div id="doc3" class="yui-t6">
+   	<div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
+   	<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b"><div class="yui-g">
+					<div id="status_block" class="flash"
+			            py:if="value_of('tg_flash', None)" py:content="tg_flash"></div>
+					<!-- YOUR DATA GOES HERE -->
+				</div>
+			</div>
+		</div>
+		<div class="yui-b"><!-- YOUR NAVIGATION GOES HERE --></div>
 	</div>
    <div id="ft">Footer is here.</div>
 </div>
