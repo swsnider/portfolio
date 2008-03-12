@@ -129,7 +129,7 @@ class Bug(SQLObject):
     abstract = UnicodeCol(length=255,notNone=True)
     description = UnicodeCol(notNone=True, default="")
     reporter = ForeignKey("User")
-    owner = 
+    owner = ForeignKey("User")
     tags = RelatedJoin("Tag", intermediateTable="bug_tag", join_column="bug_id", other_column="tag_id")
     properties = MultipleJoin("PropertyData")
     def relname(self):
