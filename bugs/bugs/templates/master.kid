@@ -42,9 +42,10 @@
 			<div class="yui-b" py:if="tg.config('identity.on') and not defined('logging_in')" id="pageLogin">
 		        <span py:if="tg.identity.anonymous">
 						<table>
+							<tr><th colspan="2">Login or Register</th></tr>
 							<tr><td><label for="user_name">User Name:</label></td><td><input type="text" id="user_name" name="user_name"/></td></tr>
 							<tr><td><label for="password">Password:</label></td><td><input type="password" id="password" name="password"/></td></tr>
-							<tr><td colspan="2"><button type="button" onclick="doLogin();">Login</button></td></tr>
+							<tr><td colspan="2"><button type="button" onclick="doLogin();">Login/Register</button></td></tr>
 						</table>
 		        </span>
 		        <span py:if="not tg.identity.anonymous">
