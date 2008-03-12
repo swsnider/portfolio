@@ -6,7 +6,7 @@
 <title>Welcome to TurboGears</title>
 </head>
 <body>
-	<div class='warning' id="domexample"><p>Are you sure to delete this item?</p> <input type='button' value='Yes, delete!' onclick='Modalbox.hide()' /> or <input type='button' value='No, leave it!' onclick='Modalbox.hide()' /></div>
+	<div class='warning' style="display:none;" id="domexample"><p>Are you sure to delete this item?</p> <input type='button' value='Yes, delete!' onclick='Modalbox.hide()' /> or <input type='button' value='No, leave it!' onclick='Modalbox.hide()' /></div>
 	<script type="text/javascript">
 		Modalbox.show($('domexample'),
 		{title: this.title, width: 300});

@@ -124,3 +124,35 @@ class Permission(SQLObject):
                          intermediateTable='group_permission',
                          joinColumn='permission_id',
                          otherColumn='group_id')
+
+class Bug(SQLObject):
+    abstract = UnicodeCol(length=255,notNone=True)
+    description = UnicodeCol(notNone=True, default="")
+    reporter = ForeignKey("User")
+    owner = 
+    tags = RelatedJoin("Tag", intermediateTable="bug_tag", join_column="bug_id", other_column="tag_id")
+    properties = MultipleJoin("PropertyData")
+    def relname(self):
+        return self.reporter.display_name + " -- " + abstract
+
+class Tag(SQLObject):
+    bugs = RelatedJoin("Tag", intermediateTable="bug_tag", join_column="tag_id", other_column="bug_id")
+    name = UnicodeCol(length=255,notNone=True)
+    def relname(self):
+        return self.name
+
+class PropertyData(SQLObject):
+    prop = ForeignKey("Property")
+    bug = ForeignKey("Bug")
+    value = UnicodeCol(notNone=True)
+    def relname(self):
+        return ""
+
+class Property(SQLObject):
+    name = UnicodeCol(length=255, notNone=True, alternateID=True)
+    valueType = EnumCol(enumValues=['boolean','string','date','foreign'], default='string', notNone=True)
+    parameters = StringCol(notNone=True, default="") #This will hold parameters that specialize the valueType. For instance, foreign valueTypes will have the table name here.
+    autofill = BoolCol(notNone=True, default=False)
+    autofillExpression = StringCol(notNone=True, default="")
+    def relname(self):
+        return ""

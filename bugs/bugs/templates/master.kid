@@ -4,7 +4,9 @@
     py:extends="sitetemplate">
 
 <head py:match="item.tag=='{http://www.w3.org/1999/xhtml}head'" py:attrs="item.items()">
-	 
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.5.0/build/yuiloader/yuiloader-beta-min.js" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.0/build/reset-fonts-grids/reset-fonts-grids.css" /> 
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.0/build/base/base-min.css" /> 
     <script src="${tg.url('/static/javascript/prototype.js')}" type="text/javascript" />
 	 <script src="${tg.url('/static/javascript/scriptaculous.js')}" type="text/javascript" />
 	 <script src="${tg.url('/static/javascript/modalbox.js')}" type="text/javascript" />
