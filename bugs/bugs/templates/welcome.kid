@@ -6,6 +6,6 @@
 <title>Welcome to TurboGears</title>
 </head>
 <body>
-
+<div py:def="page_title()">Main Page</div>
 </body>
 </html>
