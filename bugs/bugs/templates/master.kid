@@ -42,14 +42,6 @@
             py:if="value_of('tg_flash', None)" py:content="tg_flash"></div>
         <div py:replace="[item.text]+item[:]">page content</div>
     </div>
-
-    <div id="footer">
-        <img src="${tg.url('/static/images/under_the_hood_blue.png')}"
-            alt="TurboGears under the hood" />
-        <p>TurboGears is a open source front-to-back web development framework
-            written in Python</p>
-        <p>Copyright &#169; 2007 Kevin Dangoor</p>
-    </div>
 </body>
 
 </html>
