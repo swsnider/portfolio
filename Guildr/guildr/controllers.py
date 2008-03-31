@@ -3,18 +3,25 @@ from turbogears import controllers, expose, flash
 # from guildr import model
 from turbogears import identity, redirect
 from cherrypy import request, response
+from model import Guild
+from guild import GuildController
 # from guildr import json
 # import logging
 # log = logging.getLogger("guildr.controllers")
 
 class Root(controllers.RootController):
+    
+    guild = GuildController()
+    
+    @expose()
+    def flash(self, to):
+        flash(str(to))
+        raise redirect("/")
+    
     @expose(template="guildr.templates.welcome")
     # @identity.require(identity.in_group("admin"))
     def index(self):
-        import time
-        # log.debug("Happy TurboGears Controller Responding For Duty")
-        flash("Your application is now running")
-        return dict(now=time.ctime())
+        return dict(guilds=Guild.selectBy(disabled=False))
 
     @expose(template="guildr.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):

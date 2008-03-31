@@ -7,21 +7,47 @@ from turbogears.database import PackageHub
 from sqlobject import SQLObject, SQLObjectNotFound, RelatedJoin
 # import some datatypes for table columns from SQLObject
 # (see http://www.sqlobject.org/SQLObject.html#column-types for more)
-from sqlobject import StringCol, UnicodeCol, IntCol, DateTimeCol
+from sqlobject import StringCol, UnicodeCol, IntCol, DateTimeCol, ForeignKey, MultipleJoin, BoolCol, EnumCol
 from turbogears import identity
 
 __connection__ = hub = PackageHub('guildr')
 
+class PluginConfig(SQLObject):
+    setting = UnicodeCol(length=255,notNone=True)
+    value = UnicodeCol(notNone=True)
+    plugin = ForeignKey("Plugin")
+    guser = ForeignKey("GuildUser")
 
-# your data model
+class PluginDatum(SQLObject):
+    name = UnicodeCol(length=255, notNone=True)
+    value = UnicodeCol(notNone=True)
+    plugin = ForeignKey("Plugin")
+    guser = ForeignKey("GuildUser")
 
+class Plugin(SQLObject):
+    name = UnicodeCol(length=255,notNone=True)
+    guilds = RelatedJoin('Guild', joinColumn='plugin_id',
+                              intermediateTable='guild_plugin',
+                              otherColumn='guild_id')
+    configs = MultipleJoin("PluginConfig")
+    data = MultipleJoin("PluginDatum")
+    file = UnicodeCol(notNone=True)
 
-# class YourDataClass(SQLObject):
-#     pass
+class GuildUser(SQLObject):
+    tuser = ForeignKey("User")
+    guild = ForeignKey("Guild")
+    access = EnumCol(enumValues=["regular","admin"],default="regular",notNone=True)
+    configs = MultipleJoin("PluginConfig")
+    data = MultipleJoin("PluginDatum")
 
-
-# the identity model
-
+class Guild(SQLObject):
+    members = MultipleJoin("GuildUser")
+    disabled = BoolCol(notNone=True,default=False)
+    name = UnicodeCol(length=255, notNone=True)
+    website = UnicodeCol(length=255, notNone=True,default="")
+    plugins = RelatedJoin('Plugin', joinColumn='guild_id',
+                              intermediateTable='guild_plugin',
+                              otherColumn='plugin_id')
 
 class Visit(SQLObject):
     """
@@ -97,6 +123,9 @@ class User(SQLObject):
     # groups this user belongs to
     groups = RelatedJoin('Group', intermediateTable='user_group',
                          joinColumn='user_id', otherColumn='group_id')
+
+    guilds = MultipleJoin("GuildUser")
+    banned = BoolCol(notNone=True,default=False)
 
     def _get_permissions(self):
         perms = set()

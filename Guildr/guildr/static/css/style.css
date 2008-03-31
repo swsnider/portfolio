@@ -15,10 +15,14 @@ tr th {text-align:left;background-color:#f0f0f0;color:#333;}
 tr.odd td {background-color:#edf3fe;}
 tr.even td {background-color:#fff;}
 
+#real_main_content {
+  background-color: white;
+}
+
 #header {
   height: 80px;
-  width: 777px;
-  background: blue URL('../images/header_inner.png') no-repeat;
+  width: 100%;
+  background: #ddd URL('../images/header_inner.png') no-repeat;
   border-left: 1px solid #aaa;
   border-right: 1px solid #aaa;
   margin: 0 auto 0 auto;
@@ -31,9 +35,9 @@ a.link, a, a.active {
 
 #main_content {
   color: black;
-  font-size: 127%;
+  font-size: large;
   background-color: white;
-  width: 757px;
+  width: 100%;
   margin: 0 auto 0 auto;
   border-left: 1px solid #aaa;
   border-right: 1px solid #aaa;
@@ -47,7 +51,7 @@ a.link, a, a.active {
   padding: 1em;
   float: right;
   width: 200px;
-  font-size: 88%;
+  font-size: small;
 }
 
 #sidebar h2 {
@@ -90,14 +94,15 @@ h2 {
 }
 
 #footer {
+  clear: both;
   border: 1px solid #aaa;
   border-top: 0px none;
   color: #999;
   background-color: white;
   padding: 10px;
-  font-size: 80%;
+  font-size: xx-small;
   text-align: center;
-  width: 757px;
+  width: 110%;
   margin: 0 auto 1em auto;
 }
 
