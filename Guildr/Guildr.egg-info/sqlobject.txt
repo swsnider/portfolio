@@ -1,2 +1,0 @@
-db_module=guildr.model
-history_dir=$base/guildr/sqlobject-history

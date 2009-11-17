@@ -22,13 +22,6 @@ A [drupal](http://drupal.org) plugin that exposes a SAML server
 specifically for use with Google Apps for Education -- this was a Google 
 Summer of Code (2007) project
 
-Guildr
-------
-
-A TurboGears project that allows people to form guilds across many sites 
-that track various meaningful statistics in order to facilitate the 
-creation of communities around them.
-
 OpenID
 ------
 
